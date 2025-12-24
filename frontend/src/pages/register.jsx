@@ -26,13 +26,17 @@ export default function Register() {
     }
 
   return (
-    <div>
-        <form onSubmit={handleSubmit}>
-            <input type="text" placeholder='username'  onChange={e=> setName(e.target.value)}/>
-            <input type="text" placeholder='email'  onChange={e=> setEmail(e.target.value)}/>
-            <input type="password" placeholder='password' onChange={e=>setPassword(e.target.value)} />
-            <Button>Register</Button>
+    <div className='flex min-h-screen items-center justify-center m-3'>
+        <div className='flex flex-col items-center gap-4'>
+             <h3 className="text-2xl text-gray-400 m-2">Register user</h3>
+        <form className='flex flex-col gap-3' onSubmit={handleSubmit}>
+            <input required className='border border-gray-300 outline-none px-3 py-2 rounded-xl' type="text" placeholder='username'  onChange={e=> setName(e.target.value)}/>
+            <input required className='border border-gray-300 outline-none px-3 py-2 rounded-xl' type="text" placeholder='email'  onChange={e=> setEmail(e.target.value)}/>
+            <input required className='border border-gray-300 outline-none px-3 py-2 rounded-xl' type="password" placeholder='password' onChange={e=>setPassword(e.target.value)} />
+            <Button type='submit'>Register</Button>
         </form>
+        </div>
+       
     </div>
   )
 }

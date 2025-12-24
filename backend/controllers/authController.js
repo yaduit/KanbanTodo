@@ -1,5 +1,5 @@
 import userModel from '../models/user-model.js';
-import bcrypt from 'bcryptjs';
+import bcrypt, { hash } from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 export const registerUser = async (req,res)=>{
@@ -9,7 +9,7 @@ export const registerUser = async (req,res)=>{
         if(user){
             return res.status(400).json({message: 'user alredy exists'})
         }
-        const salt = await bcrypt.gensalt(10);
+       const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
         const newUser = await userModel.create({
             name,
@@ -35,10 +35,16 @@ export const LoginUser = async (req,res) =>{
         if(!isMatch){
             return res.status(400).json({message: 'invalid credentials'});
         }
-        const token = jwt.sign({id: userExists._id}, process.env.JWT_KEY,{ expiresIn : '1d'})
+        const token = jwt.sign({id: userExists._id}, process.env.JWT_KEY,{ expiresIn : '1h'})
         res.cookie('token', token);
         return res.status(200).json({message: 'login sucessfull', token});
     }catch(error){
+        console.log(error.message);
         return res.status(500).json({message: 'something went wrong'});
     }
+}
+
+export const LogoutUser = async (req,res)=>{
+    res.clearCookie('token');
+    return res.status(200).json({message: 'logout sucessfull'});
 }
