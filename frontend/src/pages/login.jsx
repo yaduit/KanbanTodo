@@ -21,7 +21,7 @@ export default function Login() {
     }catch(err){
       console.log(err.message);
     }
-    navigate('/Home')
+    navigate('/create')
   }
   return (
     <div className='flex min-h-screen justify-center'>
