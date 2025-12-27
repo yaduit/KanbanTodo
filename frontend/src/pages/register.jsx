@@ -35,6 +35,8 @@ export default function Register() {
             <input required className='border border-gray-300 outline-none px-3 py-2 rounded-xl' type="password" placeholder='password' onChange={e=>setPassword(e.target.value)} />
             <Button type='submit'>Register</Button>
         </form>
+        <p className='mt-2 text-gray-400'>Already registered then login</p>
+        <Button onClick={()=>navigate('/login')}>Login</Button>
         </div>
        
     </div>

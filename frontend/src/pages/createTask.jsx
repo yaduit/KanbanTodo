@@ -1,6 +1,6 @@
 
 import { useState } from "react"
-import api from "../api/axios"
+import api from "../api/axios.js"
 import Button from "../components/Button"
 import { useNavigate } from "react-router-dom"
 import { Link } from "react-router-dom"
