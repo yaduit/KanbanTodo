@@ -7,7 +7,8 @@ router.post('/',async function(req,res){
         const {title, description} = req.body;
         const task = await taskModel.create({
             title: title,
-            description: description
+            description: description,
+            user: req.user._id
         })
         res.status(201).json({message: 'task created sucessfully',task});
     }catch(error){
@@ -18,7 +19,7 @@ router.post('/',async function(req,res){
 
 router.get('/', async function(req, res){
     try {
-        const tasks = await taskModel.find({});
+        const tasks = await taskModel.find({user: req.user._id});
 
         return res.status(200).json({
             count: tasks.length,
@@ -46,7 +47,7 @@ router.get('/:id', async function(req,res){
 router.put('/:id',async function(req,res){
     let{id} = req.params;
     try{
-        const task = await taskModel.findByIdAndUpdate(id, req.body,{new: true, runValidators: true})
+        const task = await taskModel.findByIdAndUpdate({_id:id , user:req.user._id}, req.body,{new: true, runValidators: true})
         if(!task){
             return res.status(404).json({message: 'task not found'})
         }
@@ -60,7 +61,7 @@ router.put('/:id',async function(req,res){
 router.delete('/:id',async function(req,res){
     let{id} = req.params;
     try{
-        const task = await taskModel.findByIdAndDelete(id)
+        const task = await taskModel.findByIdAndDelete({_id:id, user:req.user._id})
         if(!task){
             return res.status(404).json({message: 'task not found'})
         }

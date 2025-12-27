@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import connection_DB from './config/db_connection.js';
 import authRouter from './routes/authRouter.js';
 import taskRouter from './routes/taskRouter.js'
-import { isLoggedIn } from './middleware/isLoggedIn.js';
+import isLoggedIn from './middleware/isLoggedIn.js';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 dotenv.config();
@@ -15,8 +15,8 @@ app.use(cors({
     credentials: true
 }))
 
-app.use(cookieParser());
 const PORT = process.env.PORT || 5555;
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 

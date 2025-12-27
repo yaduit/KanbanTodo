@@ -1,5 +1,5 @@
 import userModel from '../models/user-model.js';
-import bcrypt, { hash } from 'bcrypt';
+import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 export const registerUser = async (req,res)=>{
@@ -29,14 +29,19 @@ export const LoginUser = async (req,res) =>{
     try{
         const userExists = await userModel.findOne({email});
         if(!userExists){
-            return res.status(400).json({message: 'invalid credentials'});
+            return res.status(401).json({message: 'invalid credentials'});
         }
         const isMatch = await bcrypt.compare(password, userExists.password)
         if(!isMatch){
-            return res.status(400).json({message: 'invalid credentials'});
+            return res.status(401).json({message: 'invalid credentials'});
         }
         const token = jwt.sign({id: userExists._id}, process.env.JWT_KEY,{ expiresIn : '1h'})
-        res.cookie('token', token);
+        res.cookie('token', token,{
+            httpOnly: true,
+            sameSite: 'none',     
+            secure: false,      
+            maxAge: 60 * 60 * 1000
+        });
         return res.status(200).json({message: 'login sucessfull', token});
     }catch(error){
         console.log(error.message);
