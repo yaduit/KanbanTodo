@@ -30,6 +30,8 @@ export default function Login() {
       <input required className='border border-gray-300 rounded-xl outline-none px-3 py-2 ' type="text" placeholder='email' onChange={e=> setEmail(e.target.value)}/>
       <input required className='border border-gray-300 rounded-xl outline-none px-3 py-2 ' type="text" placeholder='password' onChange={e=>setPassword(e.target.value)}/>
       <Button type='submit'>Login</Button>
+      <h2 className='text-center mb-1 text-gray-400'>Register Below</h2>
+      <Button onClick={()=> navigate('/')}>Register</Button>
     </form>
       </div>
     

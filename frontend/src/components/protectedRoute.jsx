@@ -10,5 +10,5 @@ export default function ProtectedRoute(){
             </div>
         )
     }
-    return isAuth? <Outlet/> : <Navigate to='/auth/login'/>
+    return isAuth? <Outlet/> : <Navigate to='/login'/>
 }

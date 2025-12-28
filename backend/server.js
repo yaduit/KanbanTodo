@@ -15,7 +15,7 @@ app.use(cors({
     credentials: true
 }))
 
-const PORT = process.env.PORT || 5555;
+const PORT = process.env.PORT ;
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
