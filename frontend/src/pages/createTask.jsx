@@ -4,11 +4,14 @@ import api from "../api/axios.js"
 import Button from "../components/Button"
 import { useNavigate } from "react-router-dom"
 import { Link } from "react-router-dom"
+import UseAuth from "../context/useAuth.jsx"
 
 
 export default function CreateTask() {
   const [title, setTitle] = useState('');
   const [desc ,setDesc] = useState('');
+
+  const{logout} = UseAuth();
   const navigate = useNavigate();
 
 
@@ -27,9 +30,20 @@ export default function CreateTask() {
       console.log(err.message)
     } 
   }
+
+  const handleLogout= async ()=>{
+    try{
+      await logout()
+      navigate('/login')
+    }catch(err){
+      console.log(err.message);
+    }
+
+  };
    
   return (
     <div>
+      <Button onClick={handleLogout}>Logout</Button>
       <h3 className="text-2xl text-center text-gray-500">Create Tasks</h3>
           <Link className="px-2 py-1 m-3 border border-gray-300 rounded-xl" to='/home'>tasks</Link>
             <form onSubmit={addTasks}>
