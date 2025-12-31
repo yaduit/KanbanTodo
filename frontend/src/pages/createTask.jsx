@@ -1,8 +1,8 @@
 
-import { useState } from "react"
+import { useState,useEffect } from "react"
 import api from "../api/axios.js"
 import Button from "../components/Button"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
 import { Link } from "react-router-dom"
 import UseAuth from "../context/useAuth.jsx"
 
@@ -13,23 +13,42 @@ export default function CreateTask() {
 
   const{logout} = UseAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const editingTask = location.state;
 
-
-  const addTasks = async (e)=>{
-    e.preventDefault();
-    if(!title|| !desc) return alert('fill all the fields');
-    try{
-      await api.post('/tasks',{
-      title,
-      description: desc
-    });
-    setTitle('')
-    setDesc('')
-    navigate('/home')
-    } catch(err){
-      console.log(err.message)
-    } 
+useEffect(() => {
+  if (editingTask) {
+    setTitle(editingTask.title);
+    setDesc(editingTask.description);
   }
+}, [editingTask]);
+
+  const addTasks = async (e) => {
+  e.preventDefault();
+
+  if (!title || !desc) return alert('fill all the fields');
+
+  try {
+    if (editingTask) {
+      // ✏️ EDIT MODE
+      await api.put(`/tasks/${editingTask._id}`, {
+        title,
+        description: desc,
+      });
+    } else {
+      // ➕ CREATE MODE
+      await api.post('/tasks', {
+        title,
+        description: desc,
+      });
+    }
+
+    navigate('/home');
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
 
   const handleLogout= async ()=>{
     try{
@@ -50,7 +69,10 @@ export default function CreateTask() {
             <div className="flex justify-center gap-4 mt-3">
             <input className="w-50 outline-none px-2 py-1 border border-gray-300 rounded-xl" type="text" placeholder="enter title" value={title} onChange={e=> setTitle(e.target.value)}/>
             <textarea className="outline-none px-2 py-2 border border-gray-300 rounded-xl resize-none w-1/3" placeholder="description"value={desc} onChange={e=> setDesc(e.target.value)}></textarea>
-            <Button type="submit">Add task</Button>
+            <Button type="submit">
+            {editingTask ? "Update Task" : "Add Task"}
+            </Button>
+
             </div>
             </form>
 

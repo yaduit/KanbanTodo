@@ -1,13 +1,13 @@
- import api from "../api/axios.js"
- import TaskCard from "../components/taskCard"
- import Spinner from '../components/spinner.jsx'
+import api from "../api/axios.js"
+import TaskCard from "../components/taskCard"
+import Spinner from '../components/spinner.jsx'
 import { useEffect, useState } from "react"
 import Button from "../components/Button.jsx";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate,} from "react-router-dom";
  export default function Home(){
   const[tasks , setTasks] = useState([]);
   const[loading, setLoading] = useState(true);
-
+  
  
   const navigate = useNavigate()
 
@@ -22,6 +22,19 @@ import { Navigate, useNavigate } from "react-router-dom";
       setLoading(false)
     }
    }
+   
+   const deleteTask = async (taskId)=>{
+      try{
+        await api.delete(`/tasks/${taskId}`)
+        setTasks(prev => prev.filter(tasks=>tasks._id !== taskId))
+      }catch(err){
+        console.log(err.message)
+      }
+   }
+
+   const editTask = async(task)=>{
+        navigate('/create',{state: task});
+   };
 
    useEffect(()=>{
     getTasks()
@@ -44,7 +57,7 @@ import { Navigate, useNavigate } from "react-router-dom";
             {tasks.length === 0 && <p className=" text-xl text-gray-400 ">No tasks found</p>}
             {tasks.map((task)=>{
               return(
-                <TaskCard key={task._id} title={task.title} description={task.description} createdAt={task.createdAt}/>
+                <TaskCard task={task} key={task._id} title={task.title} description={task.description} createdAt={task.createdAt} handleDelete={deleteTask} handleEdit={editTask}/>
               )
             })}
            
